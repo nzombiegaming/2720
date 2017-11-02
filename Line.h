@@ -1,8 +1,8 @@
 //
-// CS 2720 Assignment 1 Solution
+// CS 2720 Assignment 2 Solution
 //
 /// \author Howard Cheng
-/// \date Sep 13, 2017
+/// \date October 17, 2017
 ///
 ///
 /// The Line class is an abstraction of a vertical or horizontal line that
@@ -13,6 +13,7 @@
 #define LINE_H
 
 #include "ScreenElement.h"
+#include "Exceptions.h"
 #include <iostream>
 using namespace std;
 
@@ -37,7 +38,7 @@ protected:
   int m_col2;
 
   /// the drawing character
-  char m_ch;
+  int m_ch;
 
 public:
   /// constructs a line
@@ -47,12 +48,14 @@ public:
   /// \param[in] row2 the row of the second end point
   /// \param[in] column2 the column of the second end point
   /// \param[in] ch the drawing character
+  /// \throw invalid_line_error if the line is not horizontal or vertical
   Line(int row1 = 0, int column1 = 0, int row2 = 0, int column2 = 0, 
        char ch = ' ');
 
   /// draws the line on the given Screen
   //
   /// \param[in,out] screen the screen to draw in
+  /// \throw invalid_coordinates_error if the object does not fit on the screen
   virtual void draw(Screen &screen);
 
   /// reads a description of the line from input stream.  The row and
@@ -60,6 +63,8 @@ public:
   /// are specified on one line of input separated by spaces.
   //
   /// \param[in,out] is the input stream to read from
+  /// \throw input_format_error if the user input does not satisfy the correct format
+  /// \throw invalid_line_error if the line is not vertical or horizontal
   virtual void read(istream &is);
 };
 

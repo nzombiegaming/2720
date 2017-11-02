@@ -1,8 +1,8 @@
 //
-// CS 2720 Assignment 1 Solution
+// CS 2720 Assignment 2 Solution
 //
 /// \author Howard Cheng
-/// \date Sep 13, 2017
+/// \date October 17, 2017
 ///
 ///
 /// The Box class is an abstraction of a rectangular box that can be 
@@ -14,6 +14,7 @@
 
 #include "ScreenElement.h"
 #include "Line.h"
+#include "Exceptions.h"
 
 #include <iostream>
 using namespace std;
@@ -39,7 +40,7 @@ protected:
   /// \param[in] br_column the column of the bottom right corner
   /// \param[in] ch the drawing character
   void constructLines(int ul_row, int ul_column, int br_row, int br_column,
-		      char ch);
+		      char ch) noexcept;
 
 public:
   /// constructs a box
@@ -50,11 +51,15 @@ public:
   /// \param[in] br_column the column of the bottom right corner
   /// \param[in] ch the drawing character
   Box(int ul_row = 0, int ul_column = 0, int br_row = 0, int br_column = 0, 
-      char ch = ' ');
+      char ch = ' ') noexcept;
+
+  /// destroys the object
+  virtual ~Box() noexcept {};
 
   /// draws the Box on the given Screen
   //
   /// \param[in,out] screen the screen to draw in
+  /// \throw invalid_coordinates_error if the object does not fit on the screen
   virtual void draw(Screen &screen);
 
   /// reads a description of the box from input stream.  The row and
@@ -62,6 +67,7 @@ public:
   /// are specified on one line of input separated by spaces.
   //
   /// \param[in,out] is the input stream to read from
+  /// \throw input_format_error if the user input does not satisfy the correct format
   virtual void read(istream &is);
 };
 

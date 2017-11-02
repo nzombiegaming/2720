@@ -1,8 +1,8 @@
 //
-// CS 2720 Assignment 1 Solution
+// CS 2720 Assignment 2 Solution
 //
 /// \author Howard Cheng
-/// \date September 13, 2017
+/// \date October 18, 2017
 ///
 ///
 /// The Text class is an abstraction of a text string that can be 
@@ -10,6 +10,8 @@
 ///
 
 #include "Text.h"
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -18,14 +20,15 @@ using namespace std;
 // \param[in] row the row of the first character
 // \param[in] column the column of the first character
 // \param[in] str the string
-Text::Text(int row, int column, const string &str)
-  : m_row{row}, m_col{column}, m_text{str}
+Text::Text(int row, int column, const string &str) noexcept
+  : m_row(row), m_col(column), m_text(str)
 {
 }
 
 // draws the Text on the given Screen
 //
 // \param[in,out] screen the screen to draw in
+// \throw invalid_coordinates_error if the object does not fit on the screen
 void Text::draw(Screen &screen)
 {
   for (unsigned int i = 0; i < m_text.length(); i++) {
@@ -38,13 +41,21 @@ void Text::draw(Screen &screen)
 // are specified on one line of input separated by spaces.
 //
 // \param[in,out] is the input stream to read from
+// \throw input_format_error if the user input does not satisfy the correct format
 void Text::read(istream &is)
 {
-  is >> m_row >> m_col >> m_text;
-  while (is.peek() != '\n') {
-    // eats until the end of line
-    is.ignore(1);
+  string input_line;
+  getline(is, input_line);
+
+  istringstream iss(input_line);
+  if (!(iss >> m_row >> m_col >> m_text)) {
+    throw input_format_error("Invalid input format for Text.");
   }
-  is.ignore();
+  
+  // check for trailing stuff
+  string s;
+  if (iss >> s) {
+    throw input_format_error("Invalid input format for Text.");
+  }
 }
 

@@ -1,8 +1,8 @@
 //
-// CS 2720 Assignment 1 Solution
+// CS 2720 Assignment 2 Solution
 //
 /// \author Howard Cheng
-/// \date September 13, 2017
+/// \date October 17, 2017
 ///
 ///
 /// The Text class is an abstraction of a text string that can be 
@@ -13,6 +13,7 @@
 #define TEXT_H
 
 #include "ScreenElement.h"
+#include "Exceptions.h"
 #include <string>
 #include <iostream>
 
@@ -41,11 +42,15 @@ public:
   /// \param[in] row the row of the first character
   /// \param[in] column the column of the first character
   /// \param[in] str the string
-  Text(int row = 0, int column = 0, const string &str = "");
+  Text(int row = 0, int column = 0, const string &str = "") noexcept;
+
+  /// destroys the object
+  virtual ~Text() noexcept {};
 
   /// draws the Text on the given Screen
   //
   /// \param[in,out] screen the screen to draw in
+  /// \throw invalid_coordinates_error if the object does not fit on the screen
   virtual void draw(Screen &screen);
 
   /// reads a description of the Text from input stream.  The row and
@@ -53,6 +58,7 @@ public:
   /// are specified on one line of input separated by spaces.
   //
   /// \param[in,out] is the input stream to read from
+  /// \throw input_format_error if the user input does not satisfy the correct format
   virtual void read(istream &is);
 };
 

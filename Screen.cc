@@ -1,8 +1,8 @@
 //
-// CS 2720 Assignment 1 Solution
+// CS 2720 Assignment 2 Solution
 //
 /// \author Howard Cheng
-/// \date September 13, 2017
+/// \date October 18, 2017
 ///
 ///
 /// The Screen class is an abstraction of a 2D character array.
@@ -17,30 +17,26 @@ using namespace std;
 //
 // \param[in] height the height of the array, default to 24
 // \param[in] width the width of the array, default to 80
-Screen::Screen(int height, int width)
-  : m_height{height}, m_width{width}
+Screen::Screen(int height, int width) noexcept
+  : m_height(height), m_width(width)
 {
-  m_array = new char *[height];
+  m_array.resize(height);
   for (int row = 0; row < height; row++) {
-    m_array[row] = new char[width];
+    m_array[row].resize(width);
   }
   clear();
 }
     
 // destroys the object
-Screen::~Screen()
+Screen::~Screen() noexcept
 {
-  for (int row = 0; row < m_height; row++) {
-    delete[] m_array[row];
-  }
-  delete[] m_array;
 }
 
 // resets the entire array to spaces
-void Screen::clear()
+void Screen::clear() noexcept
 {
   for (int row = 0; row < m_height; row++) {
-    fill(m_array[row], m_array[row] + m_width, ' ');
+    fill(m_array[row].begin(), m_array[row].end(), ' ');
   }
 }
 
@@ -54,6 +50,8 @@ void Screen::set(int row, int col, char ch)
 {
   if (0 <= row && row < m_height && 0 <= col && col < m_width) {
     m_array[row][col] = ch;
+  } else {
+    throw invalid_coordinates_error("Coordinates out of bound.");
   }
 };
 
@@ -62,7 +60,7 @@ void Screen::set(int row, int col, char ch)
 // \param[in] os output stream
 // \param[in] screen the Screen object
 // \return the output stream
-ostream &operator<<(ostream &os, const Screen &screen)
+ostream &operator<<(ostream &os, const Screen &screen) noexcept
 {
   for (int row = 0; row < screen.getRows(); row++) {
     for (int col = 0; col < screen.getColumns(); col++) {
